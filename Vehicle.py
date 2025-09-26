@@ -1,12 +1,12 @@
 class Vehicle:
     name:str
-    year = int
+    year:int
     make:str
-    mileage = int
+    mileage:int
     color:str
-    location = str
-    available = bool
-    rent_cost = int
+    location:str
+    available:bool
+    rent_cost:int
     def __init__(self, name, make, mileage, year, color, location):
         self.name = name
         self.year = year
@@ -16,4 +16,4 @@ class Vehicle:
         self.available = true
         
     def getAvailable():
-        return availability
+        return self.available
