@@ -2,7 +2,7 @@ class Login:
   accounts = {}
 
   def Check(name:str, password: str):
-    if (account{name} == password):
+    if (account[name] == password):
       #access the account
     else:
       return "wrong login info"
@@ -12,7 +12,7 @@ class Login:
     while(username in accounts.keys()):
       username = input("\nUsername taken: please input a different username: ")
     password = input("Please enter a password: ")
-    account{username : password}
+    account[username] = password
     
       
 
