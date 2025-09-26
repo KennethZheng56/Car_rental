@@ -1,2 +1,2 @@
 # Car_rental
-renting cars will be so easy
+renting cars  have never been easier
