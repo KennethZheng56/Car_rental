@@ -16,7 +16,7 @@ class Vehicle:
         self.available = true
         
     def getAvailable():
-        return self.available
+        return available
 
     def changeAvailable():
-        self.available = not available
+        available = not available
