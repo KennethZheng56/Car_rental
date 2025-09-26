@@ -7,3 +7,5 @@ class Vehicle:
     location = str
     availiabity = bool
     rent_cost = int
+    def getAvailable():
+        return availability
