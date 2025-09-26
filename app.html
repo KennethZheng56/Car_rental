@@ -4,27 +4,28 @@
   <meta charset="UTF-8">
   <title>App</title>
   <script type="module" src="https://pyscript.net/releases/2025.8.1/core.js"></script>
-  <py-env>
-    - paths:
-      -Temp_database.py
-  </py-env>
 </head>
 <body>
   <h1>Car Rental App</h1>
   <p>You logged in successfully. HI</p>
   <a id="return" href="/Users/kennethzheng_/Popopsp/index.html">To Login</a>
-  <button pyclick="hi()">View Catalogues</button>
+
+  <!-- Button triggers Python function -->
+  <button py-click="hi()">View Catalogues</button>
   <p id="test"></p>
+
+  <!-- Your database code -->
   <py-script src="Temp_database.py"></py-script>
-  <!-- <section class="pyscript">
-     <script type="py">
-      from pyscript import display, document
-      display("hi")
-      def hi():
-        document.getElementById("test").innerText = "str(cars)"
-    </script> 
-    <script type="py" src="./Temp_database.py"></script>
-  </section> -->
+
+  <!-- Define Python functions for button interaction -->
+  <py-script>
+from pyscript import document
+
+# Example data (replace with something from Temp_database.py if needed)
+cars = ["Toyota", "Honda", "BMW"]
+
+def hi():
+    document.getElementById("test").innerText = f"{cars}"
+  </py-script>
 </body>
-  
 </html>
