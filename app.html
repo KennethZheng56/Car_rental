@@ -7,14 +7,35 @@
 </head>
 <body>
   <h1>Car Rental App</h1>
-  <p>You logged in successfully. HI</p>
-  <a id="return" href="/Users/kennethzheng_/Popopsp/index.html">To Login</a>
+  <p>You logged in successfully, <span id="username"></span>!</p>
+  <a id="return" href="index.html">To Login</a>
 
-  <!-- Button just needs an id -->
+  <button id="logout-btn">Logout</button>
+
+  <br><br>
   <button id="view-catalogue">View Catalogues</button>
   <p id="test"></p>
 
-  <!-- Load your Python file -->
   <py-script src="Temp_database.py"></py-script>
+
+  <script>
+    function getSession() {
+      return JSON.parse(localStorage.getItem("SESSION"));
+    }
+
+    function logout() {
+      localStorage.removeItem("SESSION");
+      window.location.href = "index.html";
+    }
+
+    const session = getSession();
+    if (!session) {
+      window.location.href = "index.html";
+    } else {
+      document.getElementById("username").textContent = session.username;
+    }
+
+    document.getElementById("logout-btn").addEventListener("click", logout);
+  </script>
 </body>
 </html>
