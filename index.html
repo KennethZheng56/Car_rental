@@ -2,88 +2,142 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
-  <title>Car Rental Login</title>
-  <script type="module" src="https://pyscript.net/releases/2025.8.1/core.js"></script>
+  <title>Login</title>
   <style>
-    body { font-family: Arial, sans-serif; padding: 20px; }
-    h1 { margin-bottom: 20px; }
-    input { padding: 5px; margin-bottom: 10px; display: block; }
-    button { padding: 5px 10px; margin-bottom: 10px; }
-    .msg { color: red; }
-    .success { color: green; }
+    body {
+      font-family: Arial, sans-serif;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+      background: #f5f5f5;
+    }
+    .box {
+      background: white;
+      padding: 2rem;
+      border-radius: 12px;
+      box-shadow: 0 4px 10px rgba(0,0,0,0.2);
+      width: 320px;
+      text-align: center;
+    }
+    h2 { margin-bottom: 1rem; }
+    input {
+      width: 100%;
+      padding: 0.5rem;
+      margin: 0.5rem 0;
+      border: 1px solid #ccc;
+      border-radius: 6px;
+    }
+    button {
+      width: 100%;
+      padding: 0.7rem;
+      margin-top: 0.5rem;
+      background: #007bff;
+      color: white;
+      border: none;
+      border-radius: 6px;
+      cursor: pointer;
+      font-weight: bold;
+    }
+    button:hover { background: #0056b3; }
+    .link {
+      margin-top: 1rem;
+      display: block;
+      color: #007bff;
+      cursor: pointer;
+    }
+    .error { color: red; margin-top: 0.5rem; }
+    .success { color: green; margin-top: 0.5rem; }
   </style>
 </head>
 <body>
-  <h1>Car Rental Login</h1>
-
-  <div id="login-section">
+  <div class="box" id="loginBox">
     <h2>Login</h2>
-    <input id="loginUser" type="text" placeholder="Username">
-    <input id="loginPass" type="password" placeholder="Password">
+    <input type="text" id="loginUser" placeholder="Username">
+    <input type="password" id="loginPass" placeholder="Password">
     <button onclick="login()">Login</button>
-    <p id="loginMsg" class="msg"></p>
+    <p id="loginMsg" class="error"></p>
+    <span class="link" onclick="showSignup()">Create an account</span>
   </div>
 
-  <div id="signup-section">
+  <div class="box" id="signupBox" style="display:none;">
     <h2>Sign Up</h2>
-    <input id="signupUser" type="text" placeholder="Username">
-    <input id="signupPass" type="password" placeholder="Password">
+    <input type="text" id="signupUser" placeholder="New Username">
+    <input type="password" id="signupPass" placeholder="New Password">
     <button onclick="signup()">Sign Up</button>
-    <p id="signupMsg" class="msg"></p>
+    <p id="signupMsg" class="error"></p>
+    <span class="link" onclick="showLogin()">Back to login</span>
   </div>
 
-  <script type="py-script" src="Temp_database.py"></script>
+  <script>
+    // Initialize with default accounts if none exist
+    if (!localStorage.getItem("USERS")) {
+      const defaultUsers = [
+        { username: "Matthew_Liao", password: "IS_GAY" },
+      ];
+      localStorage.setItem("USERS", JSON.stringify(defaultUsers));
+    }
 
-  <py-script>
-from js import document, localStorage, window
-import json
+    function getUsers() {
+      return JSON.parse(localStorage.getItem("USERS")) || [];
+    }
 
-def setSession(user):
-    localStorage.setItem("SESSION", json.dumps(user))
+    function saveUsers(users) {
+      localStorage.setItem("USERS", JSON.stringify(users));
+    }
 
-def login(ev=None):
-    username = document.getElementById("loginUser").value
-    password = document.getElementById("loginPass").value
-    msg = document.getElementById("loginMsg")
-    msg.innerHTML = ""
+    function login() {
+      const user = document.getElementById("loginUser").value;
+      const pass = document.getElementById("loginPass").value;
+      const msg = document.getElementById("loginMsg");
+      msg.textContent = "";
 
-    user = verify_user(username, password)
-    if user:
-        setSession(user)
-        if user["role"] == "admin":
-            window.location.href = "admin.html"
-        else:
-            window.location.href = "app.html"
-    else:
-        msg.innerHTML = "Invalid username or password!"
+      const users = getUsers();
+      const match = users.find(u => u.username === user && u.password === pass);
 
-def signup(ev=None):
-    username = document.getElementById("signupUser").value
-    password = document.getElementById("signupPass").value
-    msg = document.getElementById("signupMsg")
-    msg.innerHTML = ""
+      if (match) {
+        window.location.href = "app.html"; // success
+      } else {
+        msg.textContent = "Invalid username or password!";
+      }
+    }
 
-    if not username or not password:
-        msg.innerHTML = "Please fill in all fields."
-        return
+    function signup() {
+      const user = document.getElementById("signupUser").value;
+      const pass = document.getElementById("signupPass").value;
+      const msg = document.getElementById("signupMsg");
+      msg.textContent = "";
 
-    if add_user(username, password):
-        msg.innerHTML = "Account created successfully!"
-        msg.className = "success"
-    else:
-        msg.innerHTML = "Username already exists!"
-        msg.className = "msg"
+      let users = getUsers();
 
-def check_session():
-    session_json = localStorage.getItem("SESSION")
-    if session_json:
-        user = json.loads(session_json)
-        if user["role"] == "admin":
-            window.location.href = "admin.html"
-        else:
-            window.location.href = "app.html"
+      if (!user || !pass) {
+        msg.textContent = "Please fill in all fields.";
+        return;
+      }
 
-check_session()
-  </py-script>
+      if (users.find(u => u.username === user)) {
+        msg.textContent = "Username already exists!";
+        return;
+      }
+
+      users.push({ username: user, password: pass });
+      saveUsers(users);
+
+      msg.textContent = "Account created successfully!";
+      msg.className = "success";
+
+      setTimeout(() => showLogin(), 1500);
+    }
+
+    function showSignup() {
+      document.getElementById("loginBox").style.display = "none";
+      document.getElementById("signupBox").style.display = "block";
+    }
+
+    function showLogin() {
+      document.getElementById("signupBox").style.display = "none";
+      document.getElementById("loginBox").style.display = "block";
+    }
+  </script>
 </body>
 </html>
