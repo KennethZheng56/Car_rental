@@ -1,1 +1,67 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Admin Page</title>
+</head>
+<body>
+  <h1>Welcome Admin, <span id="username"></span> ⚡</h1>
+  <p>You can manage users here:</p>
+
+  <ul id="userList"></ul>
+
+  <button onclick="logout()">Logout</button>
+
+  <script>
+    function getUsers() {
+      return JSON.parse(localStorage.getItem("USERS")) || [];
+    }
+    function saveUsers(users) {
+      localStorage.setItem("USERS", JSON.stringify(users));
+    }
+    function getSession() {
+      return JSON.parse(localStorage.getItem("SESSION"));
+    }
+    function logout() {
+      localStorage.removeItem("SESSION");
+      window.location.href = "index.html";
+    }
+
+    const session = getSession();
+    if (!session) {
+      window.location.href = "index.html"; // not logged in
+    } else if (session.role !== "admin") {
+      window.location.href = "app.html"; // send normal users back
+    } else {
+      document.getElementById("username").textContent = session.username;
+    }
+
+    function renderUsers() {
+      const users = getUsers();
+      const list = document.getElementById("userList");
+      list.innerHTML = "";
+
+      users.forEach((u, i) => {
+        const li = document.createElement("li");
+        li.textContent = `${u.username} (${u.role})`;
+
+        if (u.role !== "admin") {
+          const btn = document.createElement("button");
+          btn.textContent = "Make Admin";
+          btn.onclick = () => {
+            users[i].role = "admin";
+            saveUsers(users);
+            renderUsers();
+          };
+          li.appendChild(btn);
+        }
+
+        list.appendChild(li);
+      });
+    }
+
+    renderUsers();
+  </script>
+</body>
+</html>
 
