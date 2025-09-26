@@ -69,75 +69,71 @@
     <span class="link" onclick="showLogin()">Back to login</span>
   </div>
 
-  <script>
-    // Initialize with default accounts if none exist
-    if (!localStorage.getItem("USERS")) {
-      const defaultUsers = [
-        { username: "Matthew_Liao", password: "IS_GAY" },
-      ];
-      localStorage.setItem("USERS", JSON.stringify(defaultUsers));
-    }
+<script>
+  if (!localStorage.getItem("USERS")) {
+    const defaultUsers = [
+      { username: "Matthew_Liao", password: "IS_GAY", role: "admin" },
+    ];
+    localStorage.setItem("USERS", JSON.stringify(defaultUsers));
+  }
 
-    function getUsers() {
-      return JSON.parse(localStorage.getItem("USERS")) || [];
-    }
+  function getUsers() {
+    return JSON.parse(localStorage.getItem("USERS")) || [];
+  }
 
-    function saveUsers(users) {
-      localStorage.setItem("USERS", JSON.stringify(users));
-    }
+  function saveUsers(users) {
+    localStorage.setItem("USERS", JSON.stringify(users));
+  }
 
-    function login() {
-      const user = document.getElementById("loginUser").value;
-      const pass = document.getElementById("loginPass").value;
-      const msg = document.getElementById("loginMsg");
-      msg.textContent = "";
+  function setSession(user) {
+    localStorage.setItem("SESSION", JSON.stringify(user));
+  }
 
-      const users = getUsers();
-      const match = users.find(u => u.username === user && u.password === pass);
+  function login() {
+    const user = document.getElementById("loginUser").value;
+    const pass = document.getElementById("loginPass").value;
+    const msg = document.getElementById("loginMsg");
+    msg.textContent = "";
 
-      if (match) {
-        window.location.href = "app.html"; // success
+    const users = getUsers();
+    const match = users.find(u => u.username === user && u.password === pass);
+
+    if (match) {
+      setSession(match);
+      if (match.role === "admin") {
+        window.location.href = "admin.html";
       } else {
-        msg.textContent = "Invalid username or password!";
+        window.location.href = "app.html";
       }
+    } else {
+      msg.textContent = "Invalid username or password!";
+    }
+  }
+
+  function signup() {
+    const user = document.getElementById("signupUser").value;
+    const pass = document.getElementById("signupPass").value;
+    const msg = document.getElementById("signupMsg");
+    msg.textContent = "";
+
+    let users = getUsers();
+
+    if (!user || !pass) {
+      msg.textContent = "Please fill in all fields.";
+      return;
     }
 
-    function signup() {
-      const user = document.getElementById("signupUser").value;
-      const pass = document.getElementById("signupPass").value;
-      const msg = document.getElementById("signupMsg");
-      msg.textContent = "";
-
-      let users = getUsers();
-
-      if (!user || !pass) {
-        msg.textContent = "Please fill in all fields.";
-        return;
-      }
-
-      if (users.find(u => u.username === user)) {
-        msg.textContent = "Username already exists!";
-        return;
-      }
-
-      users.push({ username: user, password: pass });
-      saveUsers(users);
-
-      msg.textContent = "Account created successfully!";
-      msg.className = "success";
-
-      setTimeout(() => showLogin(), 1500);
+    if (users.find(u => u.username === user)) {
+      msg.textContent = "Username already exists!";
+      return;
     }
 
-    function showSignup() {
-      document.getElementById("loginBox").style.display = "none";
-      document.getElementById("signupBox").style.display = "block";
-    }
+    users.push({ username: user, password: pass, role: "user" });
+    saveUsers(users);
 
-    function showLogin() {
-      document.getElementById("signupBox").style.display = "none";
-      document.getElementById("loginBox").style.display = "block";
-    }
-  </script>
-</body>
-</html>
+    msg.textContent = "Account created successfully!";
+    msg.className = "success";
+
+    setTimeout(() => showLogin(), 1500);
+  }
+</script>
