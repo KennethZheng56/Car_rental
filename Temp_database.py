@@ -1,4 +1,5 @@
 from pyscript import document, when
+from js import window
 import json
 
 DB_KEY_USERS = "temp_users"
@@ -12,14 +13,14 @@ DEFAULT_USERS = [
 DEFAULT_CARS = ["Toyota", "Honda", "BMW"]
 
 def load_cars():
-    cars_json = document.window.localStorage.getItem(DB_KEY_CARS)
+    cars_json = window.localStorage.getItem(DB_KEY_CARS)
     if cars_json is None:
         save_cars(DEFAULT_CARS)
         return DEFAULT_CARS
     return json.loads(cars_json)
 
 def save_cars(cars):
-    document.window.localStorage.setItem(DB_KEY_CARS, json.dumps(cars))
+    window.localStorage.setItem(DB_KEY_CARS, json.dumps(cars))
 
 def add_car(car):
     cars = load_cars()
@@ -43,16 +44,15 @@ def show_cars(event=None):
     html += "</ul>"
     document.getElementById("test").innerHTML = html
 
-# ---- User database ----
 def load_db():
-    users_json = document.window.localStorage.getItem(DB_KEY_USERS)
+    users_json = window.localStorage.getItem(DB_KEY_USERS)
     if users_json is None:
         save_db(DEFAULT_USERS)
         return DEFAULT_USERS
     return json.loads(users_json)
 
 def save_db(users):
-    document.window.localStorage.setItem(DB_KEY_USERS, json.dumps(users))
+    window.localStorage.setItem(DB_KEY_USERS, json.dumps(users))
 
 def get_users():
     return load_db()
