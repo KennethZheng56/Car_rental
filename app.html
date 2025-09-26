@@ -3,17 +3,28 @@
 <head>
   <meta charset="UTF-8">
   <title>App</title>
+  <script type="module" src="https://pyscript.net/releases/2025.8.1/core.js"></script>
+  <py-env>
+    - paths:
+      -Temp_database.py
+  </py-env>
 </head>
 <body>
   <h1>Car Rental App</h1>
   <p>You logged in successfully. HI</p>
-  <button id="output">hi</button>
-  <py-script>
-    from pyscript import Element
-    def test(event = None):
-      Element("output").element.innerHTML = "<p>Hello from Python!</p>"
-    
-  </py-script>
+  <a id="return" href="/Users/kennethzheng_/Popopsp/index.html">To Login</a>
+  <button pyclick="hi()">View Catalogues</button>
+  <p id="test"></p>
+  <py-script src="Temp_database.py"></py-script>
+  <!-- <section class="pyscript">
+     <script type="py">
+      from pyscript import display, document
+      display("hi")
+      def hi():
+        document.getElementById("test").innerText = "str(cars)"
+    </script> 
+    <script type="py" src="./Temp_database.py"></script>
+  </section> -->
 </body>
   
 </html>
