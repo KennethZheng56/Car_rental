@@ -6,9 +6,14 @@
 </head>
 <body>
   <h1>Car Rental App</h1>
-  <p>You logged in successfully. ${fucker}</p>
-</body>
+  <p>You logged in successfully.</p>
+  <button id="output">hi</button>
   <py-script>
-    fucker = "hi"
+    from pyscript import Element
+    def test(event = None):
+      Element("output").element.innerHTML = "<p>Hello from Python!</p>"
+    
   </py-script>
+</body>
+  
 </html>
