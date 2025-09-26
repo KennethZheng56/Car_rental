@@ -15,11 +15,11 @@ class Vehicle:
         self.location = location
         self.available = true
         
-    def getAvailable():
-        return available
+    def getAvailable(self):
+        return self.available
 
-    def changeAvailable():
-        available = not available
+    def changeAvailable(self):
+        self.available = not self.available
 
-    def getInfo():
-        return [name, year, mileage, color, location, true]
+    def getInfo(self):
+        return [self.name, self.year, self.mileage, self.color, self.location, self.available]
