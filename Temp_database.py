@@ -7,7 +7,7 @@ DB_KEY_CARS = "temp_cars"
 # Default demo data
 DEFAULT_USERS = [
     {"username": "Matthew_Liao", "password": "IS_GAY", "role": "admin"},
-    {"username": "Alice", "password": "1234", "role": "user"}
+    {"username": "Homer", "password": "Wang", "role": "user"}
 ]
 
 DEFAULT_CARS = ["Toyota", "Honda", "BMW"]
