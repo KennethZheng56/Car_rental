@@ -8,6 +8,11 @@ class Login:
       return "wrong login info"
 
   def AddAccount():
+    username = input("Please enter a username: ")
+    while(username in accounts.keys()):
+      username = input("\nUsername taken: please input a different username: ")
+    password = input("Please enter a password: ")
+    account{username : password}
     
       
 
