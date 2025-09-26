@@ -1,0 +1,141 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Admin Panel - Car Rental</title>
+  <script type="module" src="https://pyscript.net/releases/2025.8.1/core.js"></script>
+  <style>
+    body { font-family: Arial, sans-serif; padding: 20px; }
+    h1, h2 { margin-top: 20px; }
+    ul { list-style-type: none; padding-left: 0; }
+    li { margin-bottom: 10px; }
+    button { margin-left: 5px; }
+    input { padding: 5px; margin-right: 5px; }
+  </style>
+</head>
+<body>
+  <h1>Admin Panel - Car Rental</h1>
+  <p>Logged in as: <span id="username"></span></p>
+  <button id="logout-btn">Logout</button>
+
+  <h2>User Management</h2>
+  <ul id="user-list"></ul>
+  <input type="text" id="new-username" placeholder="Username">
+  <input type="password" id="new-password" placeholder="Password">
+  <select id="new-role">
+    <option value="user">User</option>
+    <option value="admin">Admin</option>
+  </select>
+  <button id="add-user-btn">Add User</button>
+
+  <h2>Car Catalogue Management</h2>
+  <ul id="car-list"></ul>
+  <input type="text" id="new-car" placeholder="Car Name">
+  <button id="add-car-btn">Add Car</button>
+
+  <script type="py-script" src="Temp_database.py"></script>
+  <py-script>
+from js import document, localStorage, window
+import json
+
+def getSession():
+    session_json = localStorage.getItem("SESSION")
+    return json.loads(session_json) if session_json else None
+
+def logout(ev):
+    localStorage.removeItem("SESSION")
+    window.location.href = "index.html"
+
+def refresh_users():
+    ul = document.getElementById("user-list")
+    ul.innerHTML = ""
+    users = get_users()
+    for u in users:
+        li = document.createElement("li")
+        li.innerHTML = f"{u['username']} ({u['role']})"
+        if u["role"] != "admin":
+            promote_btn = document.createElement("button")
+            promote_btn.innerHTML = "Make Admin"
+            def make_admin(ev, username=u['username']):
+                change_role(username, "admin")
+                refresh_users()
+            promote_btn.addEventListener("click", make_admin)
+            li.appendChild(promote_btn)
+        remove_btn = document.createElement("button")
+        remove_btn.innerHTML = "Remove"
+        def remove_user_event(ev, username=u['username']):
+            remove_user(username)
+            refresh_users()
+        remove_btn.addEventListener("click", remove_user_event)
+        li.appendChild(remove_btn)
+        ul.appendChild(li)
+
+def refresh_cars():
+    ul = document.getElementById("car-list")
+    ul.innerHTML = ""
+    for car in load_cars():
+        li = document.createElement("li")
+        li.innerHTML = car
+        remove_btn = document.createElement("button")
+        remove_btn.innerHTML = "Remove"
+        def remove_car_event(ev, carname=car):
+            remove_car(carname)
+            refresh_cars()
+        remove_btn.addEventListener("click", remove_car_event)
+        li.appendChild(remove_btn)
+        ul.appendChild(li)
+
+def setup_admin_page():
+    session = getSession()
+    if not session or session["role"] != "admin":
+        window.location.href = "index.html"
+    else:
+        document.getElementById("username").innerHTML = session["username"]
+        refresh_users()
+        refresh_cars()
+
+setup_admin_page()
+  </py-script>
+
+  <script>
+    document.getElementById("logout-btn").addEventListener("click", function(){
+      localStorage.removeItem("SESSION");
+      window.location.href = "index.html";
+    });
+
+    document.getElementById("add-user-btn").addEventListener("click", function(){
+      const username = document.getElementById("new-username").value;
+      const password = document.getElementById("new-password").value;
+      const role = document.getElementById("new-role").value;
+      if (!username || !password) {
+        alert("Please fill all user fields.");
+        return;
+      }
+      try {
+        pyodide.runPython(`add_user("${username}", "${password}", "${role}")`);
+        alert("User added successfully.");
+        location.reload();
+      } catch(e) {
+        console.error(e);
+        alert("Failed to add user.");
+      }
+    });
+
+    document.getElementById("add-car-btn").addEventListener("click", function(){
+      const carname = document.getElementById("new-car").value;
+      if (!carname) {
+        alert("Please enter a car name.");
+        return;
+      }
+      try {
+        pyodide.runPython(`add_car("${carname}")`);
+        alert("Car added successfully.");
+        location.reload();
+      } catch(e) {
+        console.error(e);
+        alert("Failed to add car.");
+      }
+    });
+  </script>
+</body>
+</html>
