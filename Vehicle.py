@@ -5,7 +5,10 @@ class Vehicle:
     mileage = int
     color = ""
     location = str
-    availiabity = bool
+    availability = bool
     rent_cost = int
+    def init():
+        availability = true
+        
     def getAvailable():
         return availability
