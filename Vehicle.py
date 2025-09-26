@@ -20,3 +20,6 @@ class Vehicle:
 
     def changeAvailable():
         available = not available
+
+    def getInfo():
+        return [name, year, mileage, color, location, true]
