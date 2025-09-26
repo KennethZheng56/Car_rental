@@ -4,7 +4,6 @@ import json
 DB_KEY_USERS = "temp_users"
 DB_KEY_CARS = "temp_cars"
 
-# Default demo data
 DEFAULT_USERS = [
     {"username": "Matthew_Liao", "password": "IS_GAY", "role": "admin"},
     {"username": "Homer", "password": "Wang", "role": "user"}
@@ -12,7 +11,6 @@ DEFAULT_USERS = [
 
 DEFAULT_CARS = ["Toyota", "Honda", "BMW"]
 
-# ---- Car catalogue ----
 def load_cars():
     cars_json = document.window.localStorage.getItem(DB_KEY_CARS)
     if cars_json is None:
