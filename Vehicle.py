@@ -17,3 +17,6 @@ class Vehicle:
         
     def getAvailable():
         return self.available
+
+    def changeAvailable():
+        self.available = not available
