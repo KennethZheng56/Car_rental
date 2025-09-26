@@ -1,10 +1,14 @@
-from pyscript import document
+from pyscript import document, when
 
-login = [{"username":"Matthew_Liao", "password":"IS_GAY"}]
-cars = [{"car":"Honda", "make":"wow", "model":"no", "year":"old"}]
+cars = ["Toyota", "Honda", "BMW"]
 
-def add_user(user:str, password:str):
-  login.append({"username":user, "password":password})
+@when("click", "#view-catalogue")
+def hi(event=None):
+    # Build an unordered list of cars
+    html = "<ul>"
+    for car in cars:
+        html += f"<li>{car}</li>"
+    html += "</ul>"
 
-def hi():
-  document.getElementById("test").innerText = str(cars)
+    # Insert into the <p id="test"> element
+    document.getElementById("test").innerHTML = html

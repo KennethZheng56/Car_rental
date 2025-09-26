@@ -10,22 +10,11 @@
   <p>You logged in successfully. HI</p>
   <a id="return" href="/Users/kennethzheng_/Popopsp/index.html">To Login</a>
 
-  <!-- Button triggers Python function -->
-  <button py-click="hi()">View Catalogues</button>
+  <!-- Button just needs an id -->
+  <button id="view-catalogue">View Catalogues</button>
   <p id="test"></p>
 
-  <!-- Your database code -->
+  <!-- Load your Python file -->
   <py-script src="Temp_database.py"></py-script>
-
-  <!-- Define Python functions for button interaction -->
-  <py-script>
-from pyscript import document
-
-# Example data (replace with something from Temp_database.py if needed)
-cars = ["Toyota", "Honda", "BMW"]
-
-def hi():
-    document.getElementById("test").innerText = f"{cars}"
-  </py-script>
 </body>
 </html>
