@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
-  <title>Car Rental Login</title>
+  <title>Demo Login</title>
   <style>
     body {
       font-family: Arial, sans-serif;
@@ -12,14 +12,15 @@
       height: 100vh;
       background: #f5f5f5;
     }
-    .login-box {
+    .box {
       background: white;
       padding: 2rem;
       border-radius: 12px;
       box-shadow: 0 4px 10px rgba(0,0,0,0.2);
-      width: 300px;
+      width: 320px;
+      text-align: center;
     }
-    h2 { text-align: center; margin-bottom: 1rem; }
+    h2 { margin-bottom: 1rem; }
     input {
       width: 100%;
       padding: 0.5rem;
@@ -30,6 +31,7 @@
     button {
       width: 100%;
       padding: 0.7rem;
+      margin-top: 0.5rem;
       background: #007bff;
       color: white;
       border: none;
@@ -38,35 +40,103 @@
       font-weight: bold;
     }
     button:hover { background: #0056b3; }
-    .error { color: red; text-align: center; margin-top: 0.5rem; }
+    .link {
+      margin-top: 1rem;
+      display: block;
+      color: #007bff;
+      cursor: pointer;
+    }
+    .error { color: red; margin-top: 0.5rem; }
+    .success { color: green; margin-top: 0.5rem; }
   </style>
 </head>
 <body>
-  <div class="login-box">
+  <div class="box" id="loginBox">
     <h2>Login</h2>
-    <input type="text" id="username" placeholder="Username">
-    <input type="password" id="password" placeholder="Password">
+    <input type="text" id="loginUser" placeholder="Username">
+    <input type="password" id="loginPass" placeholder="Password">
     <button onclick="login()">Login</button>
-    <p id="error" class="error"></p>
+    <p id="loginMsg" class="error"></p>
+    <span class="link" onclick="showSignup()">Create an account</span>
+  </div>
+
+  <div class="box" id="signupBox" style="display:none;">
+    <h2>Sign Up</h2>
+    <input type="text" id="signupUser" placeholder="New Username">
+    <input type="password" id="signupPass" placeholder="New Password">
+    <button onclick="signup()">Sign Up</button>
+    <p id="signupMsg" class="error"></p>
+    <span class="link" onclick="showLogin()">Back to login</span>
   </div>
 
   <script>
-    const USERS = [
-      { username: "Matthew_Liao", password: "IS_GAY" },
-    ];
+    // Initialize with default accounts if none exist
+    if (!localStorage.getItem("USERS")) {
+      const defaultUsers = [
+        { username: "Matthew_Liao", password: "IS_GAY" },
+      ];
+      localStorage.setItem("USERS", JSON.stringify(defaultUsers));
+    }
+
+    function getUsers() {
+      return JSON.parse(localStorage.getItem("USERS")) || [];
+    }
+
+    function saveUsers(users) {
+      localStorage.setItem("USERS", JSON.stringify(users));
+    }
 
     function login() {
-      const user = document.getElementById("username").value;
-      const pass = document.getElementById("password").value;
-      const error = document.getElementById("error");
+      const user = document.getElementById("loginUser").value;
+      const pass = document.getElementById("loginPass").value;
+      const msg = document.getElementById("loginMsg");
+      msg.textContent = "";
 
-      const match = USERS.find(u => u.username === user && u.password === pass);
+      const users = getUsers();
+      const match = users.find(u => u.username === user && u.password === pass);
 
       if (match) {
-        window.location.href = "app.html";
+        window.location.href = "app.html"; // success
       } else {
-        error.textContent = "Invalid username or password!";
+        msg.textContent = "Invalid username or password!";
       }
+    }
+
+    function signup() {
+      const user = document.getElementById("signupUser").value;
+      const pass = document.getElementById("signupPass").value;
+      const msg = document.getElementById("signupMsg");
+      msg.textContent = "";
+
+      let users = getUsers();
+
+      if (!user || !pass) {
+        msg.textContent = "Please fill in all fields.";
+        return;
+      }
+
+      if (users.find(u => u.username === user)) {
+        msg.textContent = "Username already exists!";
+        return;
+      }
+
+      users.push({ username: user, password: pass });
+      saveUsers(users);
+
+      msg.textContent = "Account created successfully!";
+      msg.className = "success";
+
+      setTimeout(() => showLogin(), 1500);
+    }
+
+    function showSignup() {
+      document.getElementById("loginBox").style.display = "none";
+      document.getElementById("signupBox").style.display = "block";
+    }
+
+    function showLogin() {
+      document.getElementById("signupBox").style.display = "none";
+      document.getElementById("loginBox").style.display = "block";
     }
   </script>
 </body>
