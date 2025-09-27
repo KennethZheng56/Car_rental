@@ -57,7 +57,8 @@ def show_cars(event=None):
     html += js_code(l1)
     document.getElementById("test").innerHTML = html
 
-# Doesn't work btw vvv
+# vvv - Doesn't work btw - vvv
+# Supposed to make togglable visibility
 def js_code(id:list[str]):
     code = """
     <script> 
@@ -70,7 +71,7 @@ def js_code(id:list[str]):
         const thing = document.getElementById('{i}');
         toggle.addEventListener("click", ()=> {'{'}
             console.log("no");
-            if (thing.style.display == 'none' || thing.style.display == '') {'{'}
+            if (thing.style.display === 'none' || thing.style.display === '') {'{'}
                 thing.style.display = 'block';
             {'}'} else {'{'} thing.style.display = 'none';{'}'}
             {'}'})
