@@ -13,7 +13,7 @@ class Vehicle:
         self.mileage = mileage
         self.color = color
         self.location = location
-        self.available = true
+        self.available = True
         
     def getAvailable(self):
         return self.available
