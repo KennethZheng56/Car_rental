@@ -144,9 +144,12 @@
         cars.push(car);
       });
       localStorage.setItem("CARS", JSON.stringify(cars));
-      
+      // }
+
       cars.forEach((car, i) => {
-        const imgUrl = "https://picsum.photos/400/200?random=" + (i+1); //Placeholder (Remind Homer To replace/ or someone else can thanks)
+        const imgUrl = car.image && car.image !== "" 
+          ? car.image 
+          : "https://picsum.photos/400/200?random=" + (i+1); 
         const card = `
           <div class="card">
             <img src="${imgUrl}" alt="${car.make} ${car.model}">
