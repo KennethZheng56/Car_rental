@@ -144,9 +144,10 @@
     const carsJSON = localStorage.getItem("CARS");
       if (!carsJSON) {
         localStorage.setItem("CARS", JSON.stringify([]));
-    return [];
+      return [];
+      }
+    return JSON.parse(carsJSON);    
   }
-  return JSON.parse(carsJSON);    }
 
     function saveCars(cars) {
       localStorage.setItem("CARS", JSON.stringify(cars));

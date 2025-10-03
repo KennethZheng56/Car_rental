@@ -128,8 +128,17 @@
     });
 
     function getCars() {
+      let john = localStorage.getItem("CARS");
+      if (john.length === 0){
+        localStorage.setItem("CARS", "[]");
+        const container = document.getElementById("carContainer");
+      container.innerHTML = john;
+      }
+      
+      // localStorage.setItem("CARS", "[]");
       const hi = JSON.parse(localStorage.getItem("CARS"));
-      // const hi = []
+
+      // const hi = [];
       let carsJSON = JSON.stringify(hi);
       if (!carsJSON) {
         localStorage.setItem("CARS", JSON.stringify([]));
