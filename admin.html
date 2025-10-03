@@ -141,8 +141,12 @@
 
   <script>
     function getCars() {
-      return JSON.parse(localStorage.getItem("CARS")) || [];
-    }
+    const carsJSON = localStorage.getItem("CARS");
+      if (!carsJSON) {
+        localStorage.setItem("CARS", JSON.stringify([]));
+    return [];
+  }
+  return JSON.parse(carsJSON);    }
 
     function saveCars(cars) {
       localStorage.setItem("CARS", JSON.stringify(cars));
