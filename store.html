@@ -128,16 +128,19 @@
     });
 
     function getCars() {
+      if (localStorage.getItem("CARS").length === 0){
+        localStorage.setItem("CARS", JSON.stringify([]));
+      }
       const carsJSON = JSON.parse(localStorage.getItem("CARS"));
-        if (!carsJSON) {
-        return []; // return empty array if nothing is stored
+      if (!carsJSON) {
+      return []; // return empty array if nothing is stored
     }
-      return JSON.parse(carsJSON);
+      return carsJSON;
     }
 
     function renderCars() {
       const container = document.getElementById("carContainer");
-      container.innerHTML = "hi";
+      container.innerHTML = "";
 
       const cars = getCars();
       base_cars.forEach((car)=>{
