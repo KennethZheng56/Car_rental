@@ -124,7 +124,7 @@
 
     document.getElementById("btnLogout").addEventListener("click", () => {
       localStorage.removeItem("CURRENT_USER");
-      window.location.href = "index.html";
+      window.location.href = "signin.html";
     });
 
     function getCars() {
@@ -140,10 +140,7 @@
         base_cars.forEach((car)=>{
           cars.push(car)
         });
-        // cars.push()
-        // container.innerHTML = "<p>No cars available. Please check back later.</p>";
-        // return;
-        // localStorage.setItem("CARS", JSON.stringify(cars));
+        localStorage.setItem("CARS", cars);
       }
 
       cars.forEach((car, i) => {
