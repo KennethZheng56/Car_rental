@@ -131,8 +131,9 @@
       let john = localStorage.getItem("CARS");
       if (john.length === 0){
         localStorage.setItem("CARS", "[]");
+      } else {
         const container = document.getElementById("carContainer");
-      container.innerHTML = john;
+        container.innerHTML = john;
       }
       
       // localStorage.setItem("CARS", "[]");
