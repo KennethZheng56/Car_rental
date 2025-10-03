@@ -101,6 +101,11 @@
   <div class="main">
     <h1>Manage Cars</h1>
 
+    <form>
+        <label for="carImage">Image of car:</label>
+        <input type="file" id="carImage" name="image-upload" accept="image/*">
+    </form>
+
     <form id="carForm">
       <h3>Add New Car</h3>
       <input type="text" id="carMake" placeholder="Make (e.g., Toyota)">
@@ -154,12 +159,16 @@
           <td>${car.transmission}</td>
           <td>${car.seats}</td>
           <td>$${car.price}</td>
+          <td>$${car.image}</td>
           <td><button onclick="deleteCar(${i})">Delete</button></td>
         </tr>`;
         tableBody.innerHTML += row;
       });
     }
 
+    function getImage(){
+
+    }
     function addCar() {
       const car = {
         make: document.getElementById("carMake").value,
@@ -168,6 +177,7 @@
         transmission: document.getElementById("carTransmission").value,
         seats: document.getElementById("carSeats").value,
         price: document.getElementById("carPrice").value,
+        image: document.getElementById("carImage").value,
       };
       let cars = getCars();
       cars.push(car);
