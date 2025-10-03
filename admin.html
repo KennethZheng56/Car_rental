@@ -159,17 +159,29 @@
           <td>${car.transmission}</td>
           <td>${car.seats}</td>
           <td>$${car.price}</td>
-          <td>$${car.image}</td>
+          <td>${car.image ? "<img src='" + car.image + "' width='60' />" : "No Image"}</td>
           <td><button onclick="deleteCar(${i})">Delete</button></td>
         </tr>`;
         tableBody.innerHTML += row;
       });
     }
 
-    function getImage(){
-
-    }
     function addCar() {
+      const imageInput = document.getElementById("carImage");
+      const file = imageInput.files[0];
+
+      if (file) {
+        const reader = new FileReader();
+        reader.onload = function(imageread) {
+          saveCarWithImage(imageread.target.result);
+        };
+        reader.readAsDataURL(file);
+      } else {
+        saveCarWithImage("");
+      }
+    }
+
+    function saveCarWithImage(imageData) {
       const car = {
         make: document.getElementById("carMake").value,
         model: document.getElementById("carModel").value,
@@ -177,13 +189,14 @@
         transmission: document.getElementById("carTransmission").value,
         seats: document.getElementById("carSeats").value,
         price: document.getElementById("carPrice").value,
-        image: document.getElementById("carImage").value,
+        image: imageData
       };
       let cars = getCars();
       cars.push(car);
       saveCars(cars);
       renderCars();
       document.getElementById("carForm").reset();
+      document.getElementById("carImage").value = "";
     }
 
     function deleteCar(index) {
