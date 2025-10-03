@@ -143,11 +143,12 @@
       container.innerHTML = "";
 
       const cars = getCars();
-      base_cars.forEach((car)=>{
-        cars.push(car);
-      });
-      localStorage.setItem("CARS", JSON.stringify(cars));
-      // }
+      if (cars.length === 0){
+        base_cars.forEach((car)=>{
+          cars.push(car);
+        });
+        localStorage.setItem("CARS", JSON.stringify(cars));
+      }
 
       cars.forEach((car, i) => {
         const imgUrl = car.image && car.image !== "" 
