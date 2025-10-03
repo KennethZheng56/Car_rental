@@ -108,6 +108,11 @@
   </div>
 
   <script>
+    const base_cars = [
+      {make:"ShitTruck", model:"Tesla", year:1999, transmission:"Automatic", seats:4, price:2000},
+      {make:"Frog", model:"Nature", year:0, transmission:"Automatic", seats:0, price:1},
+      {make:"Eddie", model:"Chen", year:2005, transmission:"Manual", seats:1, price:5000}
+    ];
     const currentUser = JSON.parse(localStorage.getItem("CURRENT_USER"));
     if (!currentUser) {
       alert("You must log in first!");
@@ -132,8 +137,13 @@
 
       const cars = getCars();
       if (cars.length === 0) {
-        container.innerHTML = "<p>No cars available. Please check back later.</p>";
-        return;
+        base_cars.forEach((car)=>{
+          cars.push(car)
+        });
+        // cars.push()
+        // container.innerHTML = "<p>No cars available. Please check back later.</p>";
+        // return;
+        // localStorage.setItem("CARS", JSON.stringify(cars));
       }
 
       cars.forEach((car, i) => {
