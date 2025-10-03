@@ -113,7 +113,10 @@
       {make:"Frog", model:"Nature", year:0, transmission:"Automatic", seats:0, price:1},
       {make:"Eddie", model:"Chen", year:2005, transmission:"Manual", seats:1, price:5000}
     ];
-    localStorage.setItem("CARS", JSON.stringify(base_cars));
+    if (localStorage.getItem("CARS").length === 0){
+      localStorage.setItem("CARS", JSON.stringify(base_cars));
+    }
+    
     const currentUser = JSON.parse(localStorage.getItem("CURRENT_USER"));
     if (!currentUser) {
       alert("You must log in first!");
