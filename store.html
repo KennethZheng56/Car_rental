@@ -129,12 +129,12 @@
 
     function getCars() {
       if (localStorage.getItem("CARS").length === 0){
-        localStorage.setItem("CARS", JSON.stringify([]));
+        localStorage.setItem("CARS", []);
       }
       const carsJSON = JSON.parse(localStorage.getItem("CARS"));
       if (!carsJSON) {
-      return []; // return empty array if nothing is stored
-    }
+        return []; // return empty array if nothing is stored
+      }
       return carsJSON;
     }
 
