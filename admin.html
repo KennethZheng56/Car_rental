@@ -1,216 +1,133 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <title>Admin Dashboard</title>
-  <style>
-    body {
-      font-family: 'Poppins', sans-serif;
-      margin: 0;
-      background: #f5f7fa;
-      display: flex;
-      height: 100vh;
-    }
-    .sidebar {
-      width: 220px;
-      background: #2c3e50;
-      color: white;
-      display: flex;
-      flex-direction: column;
-      padding: 1rem;
-    }
-    .sidebar h2 {
-      margin: 0 0 1rem;
-      text-align: center;
-    }
-    .sidebar a {
-      color: white;
-      padding: 0.7rem 1rem;
-      margin: 0.3rem 0;
-      text-decoration: none;
-      display: block;
-      border-radius: 6px;
-    }
-    .sidebar a:hover {
-      background: #34495e;
-    }
-    .main {
-      flex: 1;
-      padding: 2rem;
-      overflow-y: auto;
-    }
-    h1 {
-      margin-bottom: 1.5rem;
-      color: #2c3e50;
-    }
-    form {
-      background: white;
-      padding: 1.5rem;
-      border-radius: 12px;
-      box-shadow: 0 4px 10px rgba(0,0,0,0.1);
-      max-width: 500px;
-      margin-bottom: 2rem;
-    }
-    input, select {
-      width: 100%;
-      padding: 0.6rem;
-      margin: 0.5rem 0 1rem;
-      border: 1px solid #ccc;
-      border-radius: 6px;
-    }
-    button {
-      background: #3498db;
-      color: white;
-      border: none;
-      padding: 0.8rem 1.2rem;
-      border-radius: 6px;
-      cursor: pointer;
-      font-weight: bold;
-    }
-    button:hover {
-      background: #2980b9;
-    }
-    table {
-      width: 100%;
-      border-collapse: collapse;
-      background: white;
-      box-shadow: 0 4px 10px rgba(0,0,0,0.05);
-      border-radius: 12px;
-      overflow: hidden;
-    }
-    th, td {
-      padding: 1rem;
-      border-bottom: 1px solid #eee;
-      text-align: left;
-    }
-    th {
-      background: #ecf0f1;
-    }
-    tr:hover {
-      background: #f9f9f9;
-    }
-  </style>
+<meta charset="utf-8" />
+<title>Car Rental Pro — Admin</title>
+<meta name="viewport" content="width=device-width,initial-scale=1" />
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap" rel="stylesheet">
+<style>
+  *{box-sizing:border-box}
+  body{margin:0;font-family:Poppins,Arial;background:#f5f7fa;display:flex;min-height:100vh}
+  .sidebar{width:240px;background:#2c3e50;color:#fff;padding:24px}
+  .sidebar h2{margin:0 0 18px;font-size:18px}
+  .sidebar a{color:#fff;display:block;text-decoration:none;padding:8px 10px;border-radius:8px;margin-bottom:8px;background:transparent}
+  .main{flex:1;padding:22px}
+  form{background:#fff;padding:16px;border-radius:12px;box-shadow:0 8px 20px rgba(20,30,50,0.06);max-width:720px;margin-bottom:20px}
+  input,select{width:100%;padding:8px;border-radius:6px;border:1px solid #ccc;margin-bottom:10px}
+  button{padding:8px 12px;border-radius:8px;border:none;background:#1161ee;color:#fff;cursor:pointer;font-weight:700}
+  table{width:100%;border-collapse:collapse;background:#fff;border-radius:10px;overflow:hidden;box-shadow:0 8px 18px rgba(20,30,50,0.05)}
+  th,td{padding:10px;border-bottom:1px solid #eee;text-align:left}
+  img{max-width:100px;border-radius:6px}
+  .btn{padding:6px 8px;border-radius:6px;border:none;cursor:pointer}
+  .edit{background:#3498db;color:#fff}
+  .del{background:#e73c3c;color:#fff}
+  .toggle{background:#777;color:#fff}
+</style>
 </head>
 <body>
   <div class="sidebar">
     <h2>Admin Panel</h2>
     <a href="store.html">Store</a>
-    <a href="index.html">Logout</a>
+    <a href="index.html" onclick="localStorage.removeItem('CURRENT_USER')">Logout</a>
   </div>
 
   <div class="main">
-    <h1>Manage Cars</h1>
-
-    <form>
-        <label for="carImage">Image of car:</label>
-        <input type="file" id="carImage" name="image-upload" accept="image/*">
-    </form>
+    <h1>Manage Cars & Bookings</h1>
 
     <form id="carForm">
-      <h3>Add New Car</h3>
-      <input type="text" id="carMake" placeholder="Make (e.g., Toyota)">
-      <input type="text" id="carModel" placeholder="Model (e.g., Camry)">
-      <input type="number" id="carYear" placeholder="Year">
-      <select id="carTransmission">
-        <option value="">Transmission</option>
-        <option>Automatic</option>
-        <option>Manual</option>
-      </select>
-      <input type="number" id="carSeats" placeholder="Seats">
-      <input type="number" id="carPrice" placeholder="Price per day ($)">
-      <button type="button" onclick="addCar()">Add Car</button>
+      <input type="hidden" id="editIndex">
+      <input id="make" placeholder="Make" required>
+      <input id="model" placeholder="Model" required>
+      <input type="number" id="year" placeholder="Year" required>
+      <select id="transmission"><option value="">Transmission</option><option>Automatic</option><option>Manual</option></select>
+      <input type="number" id="seats" placeholder="Seats" required>
+      <input type="number" id="price" placeholder="Price per day ($)" required>
+      <select id="category"><option value="">Category</option><option>Sedan</option><option>SUV</option><option>Economy</option><option>Luxury</option></select>
+      <input id="image" placeholder="Image URL (optional)">
+      <div style="display:flex;gap:8px">
+        <button type="submit">Save Car</button>
+        <button type="button" id="resetBtn" style="background:#9aa; color:#fff">Reset</button>
+      </div>
     </form>
 
-    <h3>Car Catalogue</h3>
+    <h3>Cars</h3>
     <table id="carTable">
-      <thead>
-        <tr>
-          <th>Make</th>
-          <th>Model</th>
-          <th>Year</th>
-          <th>Transmission</th>
-          <th>Seats</th>
-          <th>Price/day</th>
-          <th>Action</th>
-        </tr>
-      </thead>
-      <tbody>
-      </tbody>
+      <thead><tr><th>Make</th><th>Model</th><th>Year</th><th>Trans</th><th>Seats</th><th>Price</th><th>Category</th><th>Image</th><th>Booked</th><th>Actions</th></tr></thead>
+      <tbody></tbody>
+    </table>
+
+    <h3 style="margin-top:18px">Bookings</h3>
+    <table id="bookTable">
+      <thead><tr><th>Car</th><th>Period</th><th>User</th><th>Status</th><th>Action</th></tr></thead>
+      <tbody></tbody>
     </table>
   </div>
 
-  <script>
-    function getCars() {
-    const carsJSON = localStorage.getItem("CARS");
-      if (!carsJSON) {
-        localStorage.setItem("CARS", JSON.stringify([]));
-    return [];
+<script>
+  function getCars(){try{return JSON.parse(localStorage.getItem('CARS'))||[];}catch(e){localStorage.setItem('CARS','[]');return[]}}
+  function saveCars(v){localStorage.setItem('CARS',JSON.stringify(v))}
+  function getBookings(){try{return JSON.parse(localStorage.getItem('BOOKINGS'))||[];}catch(e){localStorage.setItem('BOOKINGS','[]');return[]}}
+  function saveBookings(v){localStorage.setItem('BOOKINGS',JSON.stringify(v))}
+
+  const form = document.getElementById('carForm'), tbody = document.querySelector('#carTable tbody'), bookT = document.querySelector('#bookTable tbody')
+  const resetBtn = document.getElementById('resetBtn')
+
+  function renderCars(){
+    const cars = getCars(); tbody.innerHTML=''
+    cars.forEach((c,i)=>{
+      const tr = document.createElement('tr')
+      tr.innerHTML = `<td>${c.make}</td><td>${c.model}</td><td>${c.year}</td><td>${c.transmission}</td><td>${c.seats}</td><td>$${c.price}</td><td>${c.category}</td>
+        <td>${c.image?'<img src="'+c.image+'" alt="">':'No image'}</td>
+        <td>${c.booked? 'Yes':'No'}</td>
+        <td>
+          <button class="btn edit" data-i="${i}">Edit</button>
+          <button class="btn del" data-i="${i}">Delete</button>
+          <button class="btn toggle" data-i="${i}">${c.booked? 'Unbook':'Book'}</button>
+        </td>`
+      tbody.appendChild(tr)
+    })
+    attachCarEvents()
   }
-  return JSON.parse(carsJSON);    }
 
-    function saveCars(cars) {
-      localStorage.setItem("CARS", JSON.stringify(cars));
-    }
+  function renderBookings(){
+    const bookings = getBookings(); const cars = getCars(); bookT.innerHTML=''
+    bookings.forEach((b,idx)=>{
+      const tr = document.createElement('tr')
+      tr.innerHTML = `<td>${cars[b.carIndex].make} ${cars[b.carIndex].model}</td><td>${b.from} → ${b.to}</td><td>${b.user}</td><td>${b.status}</td>
+        <td><button class="btn delBooking" data-i="${idx}">Delete</button></td>`
+      bookT.appendChild(tr)
+    })
+    Array.from(document.getElementsByClassName('delBooking')).forEach(btn=>{
+      btn.onclick = ()=>{ const i=+btn.dataset.i; if(confirm('Remove booking?')){ const arr=getBookings(); const rem=arr.splice(i,1)[0]; saveBookings(arr); // free car if no other bookings
+        const remaining = arr.some(x=>x.carIndex===rem.carIndex); if(!remaining){const cars=getCars();cars[rem.carIndex].booked=false;saveCars(cars)} renderCars(); renderBookings(); } }
+    })
+  }
 
-    function renderCars() {
-      const tableBody = document.querySelector("#carTable tbody");
-      tableBody.innerHTML = "";
-      getCars().forEach((car, i) => {
-        const row = `<tr>
-          <td>${car.make}</td>
-          <td>${car.model}</td>
-          <td>${car.year}</td>
-          <td>${car.transmission}</td>
-          <td>${car.seats}</td>
-          <td>$${car.price}</td>
-          <td>${car.image ? "<img src='" + car.image + "' width='60' />" : "No Image"}</td>
-          <td><button onclick="deleteCar(${i})">Delete</button></td>
-        </tr>`;
-        tableBody.innerHTML += row;
-      });
-    }
+  function attachCarEvents(){
+    Array.from(document.getElementsByClassName('edit')).forEach(b=>{
+      b.onclick = ()=>{ const i=+b.dataset.i; const c=getCars()[i]; document.getElementById('editIndex').value=i; document.getElementById('make').value=c.make; document.getElementById('model').value=c.model; document.getElementById('year').value=c.year; document.getElementById('transmission').value=c.transmission; document.getElementById('seats').value=c.seats; document.getElementById('price').value=c.price; document.getElementById('category').value=c.category; document.getElementById('image').value=c.image||'' }
+    })
+    Array.from(document.getElementsByClassName('del')).forEach(b=>{
+      b.onclick = ()=>{ const i=+b.dataset.i; if(confirm('Delete car?')){ const arr=getCars(); arr.splice(i,1); saveCars(arr); renderCars(); } }
+    })
+    Array.from(document.getElementsByClassName('toggle')).forEach(b=>{
+      b.onclick = ()=>{ const i=+b.dataset.i; const cars=getCars(); cars[i].booked = !cars[i].booked; saveCars(cars); renderCars() }
+    })
+  }
 
-    function addCar() {
-      const imageInput = document.getElementById("carImage");
-      const file = imageInput.files[0];
+  form.addEventListener('submit',e=>{
+    e.preventDefault()
+    const idx = document.getElementById('editIndex').value
+    const car = { make:document.getElementById('make').value.trim(), model:document.getElementById('model').value.trim(), year:+document.getElementById('year').value, transmission:document.getElementById('transmission').value, seats:+document.getElementById('seats').value, price:+document.getElementById('price').value, category:document.getElementById('category').value, image:document.getElementById('image').value, booked:false}
+    const cars = getCars()
+    if(idx===''){ cars.push(car) } else { cars[idx]=car; document.getElementById('editIndex').value='' }
+    saveCars(cars); form.reset(); renderCars()
+  })
 
-      if (file) {
-        const reader = new FileReader();
-        reader.onload = function(imageread) {
-          saveCarWithImage(imageread.target.result);
-        };
-        reader.readAsDataURL(file);
-      } else {
-        saveCarWithImage("");
-      }
-    }
+  resetBtn.addEventListener('click',()=>{ form.reset(); document.getElementById('editIndex').value=''; })
 
-    function saveCarWithImage(imageData) {
-      const car = {
-        make: document.getElementById("carMake").value,
-        model: document.getElementById("carModel").value,
-        year: document.getElementById("carYear").value,
-        transmission: document.getElementById("carTransmission").value,
-        seats: document.getElementById("carSeats").value,
-        price: document.getElementById("carPrice").value,
-        image: imageData
-      };
-      let cars = getCars();
-      cars.push(car);
-      saveCars(cars);
-      renderCars();
-      document.getElementById("carForm").reset();
-      document.getElementById("carImage").value = "";
-    }
-
-    function deleteCar(index) {
-      let cars = getCars();
-      cars.splice(index, 1);
-      saveCars(cars);
-      renderCars();
-    }
-
-    renderCars();
-  </script>
+  renderCars()
+  renderBookings()
+</script>
 </body>
 </html>

@@ -1,180 +1,242 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <title>Car Rental Store</title>
-  <style>
-    body {
-      font-family: 'Poppins', sans-serif;
-      margin: 0;
-      background: #f5f7fa;
-    }
-    header {
-      background: #2c3e50;
-      color: white;
-      padding: 1rem 2rem;
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-    }
-    header h1 {
-      margin: 0;
-      font-size: 1.5rem;
-    }
-    nav {
-      display: flex;
-      align-items: center;
-      gap: 1.5rem;
-    }
-    nav a, nav span {
-      color: white;
-      text-decoration: none;
-      font-weight: bold;
-    }
-    nav a:hover {
-      text-decoration: underline;
-    }
-    .container {
-      padding: 2rem;
-      display: grid;
-      grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
-      gap: 1.5rem;
-    }
-    .card {
-      background: white;
-      border-radius: 12px;
-      box-shadow: 0 4px 10px rgba(0,0,0,0.1);
-      overflow: hidden;
-      display: flex;
-      flex-direction: column;
-      transition: transform 0.2s ease;
-    }
-    .card:hover {
-      transform: translateY(-5px);
-    }
-    .card img {
-      width: 100%;
-      height: 180px;
-      object-fit: cover;
-    }
-    .card-body {
-      padding: 1rem;
-      flex: 1;
-      display: flex;
-      flex-direction: column;
-      justify-content: space-between;
-    }
-    .card-body h3 {
-      margin: 0 0 0.5rem;
-      font-size: 1.2rem;
-      color: #2c3e50;
-    }
-    .card-body p {
-      margin: 0.3rem 0;
-      color: #555;
-      font-size: 0.9rem;
-    }
-    .price {
-      font-weight: bold;
-      color: #27ae60;
-      margin-top: 0.5rem;
-    }
-    .rent-btn {
-      margin-top: 1rem;
-      background: #3498db;
-      color: white;
-      border: none;
-      padding: 0.6rem;
-      border-radius: 6px;
-      cursor: pointer;
-      font-weight: bold;
-    }
-    .rent-btn:hover {
-      background: #2980b9;
-    }
-  </style>
+<meta charset="utf-8" />
+<title>Car Rental Pro — Store</title>
+<meta name="viewport" content="width=device-width,initial-scale=1" />
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap" rel="stylesheet">
+<style>
+  *{box-sizing:border-box}
+  body{margin:0;font-family:Poppins,Arial;background:#f5f7fa}
+  header{background:#2c3e50;color:#fff;padding:16px 24px;display:flex;align-items:center;justify-content:space-between}
+  h1{margin:0;font-size:20px}
+  nav{display:flex;gap:12px;align-items:center}
+  nav a, nav span{color:#fff;text-decoration:none;font-weight:600}
+  .wrap{max-width:1200px;margin:18px auto;padding:0 18px}
+  .filters{display:flex;gap:12px;margin-bottom:14px;align-items:center;flex-wrap:wrap}
+  select,input[type="date"]{padding:8px;border-radius:6px;border:1px solid #ccc;background:#fff}
+  .grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:18px}
+  .card{background:#fff;border-radius:12px;box-shadow:0 6px 18px rgba(20,30,50,0.06);overflow:hidden;display:flex;flex-direction:column}
+  .thumb{height:160px;background:#efefef;display:block;width:100%;object-fit:cover}
+  .body{padding:14px;flex:1;display:flex;flex-direction:column}
+  .body h3{margin:0 0 6px;color:#203445}
+  .meta{color:#6b7785;font-size:13px;margin-bottom:8px}
+  .price{font-weight:700;color:#1f8f4a;margin-top:auto}
+  .row{display:flex;gap:8px;align-items:center;margin-top:12px}
+  .btn{padding:10px 12px;border-radius:8px;border:none;background:#1161ee;color:#fff;cursor:pointer;font-weight:700}
+  .btn[disabled]{background:#bdbdbd;cursor:not-allowed}
+  .muted{color:#6b7785;font-size:13px}
+  .modal-back{position:fixed;inset:0;background:rgba(0,0,0,0.45);display:none;align-items:center;justify-content:center;padding:20px}
+  .modal{background:#fff;border-radius:12px;padding:18px;max-width:520px;width:100%;box-shadow:0 14px 40px rgba(10,20,40,0.2)}
+  .form-row{display:flex;gap:10px}
+  .small{flex:1}
+  table{width:100%;border-collapse:collapse}
+  th,td{padding:8px;border-bottom:1px solid #eee;text-align:left}
+  .booked-note{color:#b23;font-weight:700}
+</style>
 </head>
 <body>
-  <header>
-    <h1>Car Rental Store</h1>
-    <nav>
-      <span id="welcomeUser"></span>
-      <a href="admin.html">Admin</a>
-      <a href="#" id="btnLogout">Logout</a>
-    </nav>
-  </header>
+<header>
+  <h1>Car Rental Store</h1>
+  <nav>
+    <span id="welcomeUser">Guest</span>
+    <a href="#" id="adminLink">Admin</a>
+    <a id="logoutBtn" href="#">Logout</a>
+  </nav>
+</header>
 
-  <div class="container" id="carContainer">
+<div class="wrap">
+  <div class="filters">
+    <select id="categoryFilter"><option value="">All Categories</option><option>Sedan</option><option>SUV</option><option>Economy</option><option>Luxury</option></select>
+    <select id="transFilter"><option value="">Any Transmission</option><option>Automatic</option><option>Manual</option></select>
+    <select id="priceFilter"><option value="">Any Price</option><option value="1">Below $50</option><option value="2">$50-100</option><option value="3">Above $100</option></select>
+    <input id="fromDate" type="date">
+    <input id="toDate" type="date">
+    <button class="btn" id="applyDateBtn">Check Availability</button>
   </div>
 
-  <script>
-    const base_cars = [
-      {make:"ShitTruck", model:"Tesla", year:1999, transmission:"Automatic", seats:4, price:2000},
-      {make:"Frog", model:"Nature", year:0, transmission:"Automatic", seats:0, price:1},
-      {make:"Eddie", model:"Chen", year:2005, transmission:"Manual", seats:1, price:5000}
-    ];
-    const currentUser = JSON.parse(localStorage.getItem("CURRENT_USER"));
-    if (!currentUser) {
-      alert("You must log in first!");
-      window.location.href = "index.html";
+  <div id="grid" class="grid"></div>
+
+  <h3 style="margin-top:22px">Your Bookings</h3>
+  <table id="bookingsTable"><thead><tr><th>Car</th><th>Period</th><th>Status</th><th>Action</th></tr></thead><tbody></tbody></table>
+</div>
+
+<div id="payModal" class="modal-back">
+  <div class="modal">
+    <h3 id="payTitle">Book car</h3>
+    <div id="payDetails" style="margin-bottom:12px;color:#333"></div>
+    <form id="payForm">
+      <div style="margin-bottom:8px"><label class="muted">Name on Card</label><input required style="width:100%;padding:8px;border-radius:6px;border:1px solid #ccc" id="cardName"></div>
+      <div style="margin-bottom:8px"><label class="muted">Card Number</label><input required maxlength="19" placeholder="1234 5678 9012 3456" style="width:100%;padding:8px;border-radius:6px;border:1px solid #ccc" id="cardNum"></div>
+      <div class="form-row">
+        <input id="exp" placeholder="MM/YY" class="small" required style="padding:8px;border-radius:6px;border:1px solid #ccc">
+        <input id="cvv" placeholder="CVV" class="small" required maxlength="4" style="padding:8px;border-radius:6px;border:1px solid #ccc">
+      </div>
+      <div style="display:flex;gap:8px;justify-content:flex-end;margin-top:12px">
+        <button type="button" class="btn" id="cancelPay" style="background:#bdbdbd">Cancel</button>
+        <button type="submit" class="btn">Pay & Confirm</button>
+      </div>
+    </form>
+  </div>
+</div>
+
+<script>
+  function getCars(){try{return JSON.parse(localStorage.getItem('CARS'))||[];}catch(e){localStorage.setItem('CARS','[]');return[]}}
+  function saveCars(v){localStorage.setItem('CARS',JSON.stringify(v))}
+  function getBookings(){try{return JSON.parse(localStorage.getItem('BOOKINGS'))||[];}catch(e){localStorage.setItem('BOOKINGS','[]');return[]}}
+  function saveBookings(v){localStorage.setItem('BOOKINGS',JSON.stringify(v))}
+
+  (function initBase(){
+    const cars = getCars()
+    if(cars.length===0){
+      const base = [
+        {make:"Toyota",model:"Corolla",year:2020,transmission:"Automatic",seats:5,price:50,category:"Sedan",image:"https://upload.wikimedia.org/wikipedia/commons/9/9e/2019_Toyota_Corolla_Icon_Tech_VVT-i_HEV_CVT_1.8_Front.jpg",booked:false},
+        {make:"Honda",model:"Civic",year:2021,transmission:"Automatic",seats:5,price:55,category:"Sedan",image:"https://upload.wikimedia.org/wikipedia/commons/f/fc/2021_Honda_Civic_Sport_front.jpg",booked:false},
+        {make:"Nissan",model:"Altima",year:2019,transmission:"Automatic",seats:5,price:52,category:"Sedan",image:"https://upload.wikimedia.org/wikipedia/commons/8/89/2019_Nissan_Altima_SV%2C_front_10.23.19.jpg",booked:false},
+        {make:"Honda",model:"CR-V",year:2019,transmission:"Automatic",seats:5,price:65,category:"SUV",image:"https://upload.wikimedia.org/wikipedia/commons/4/49/2018_Honda_CR-V_SR_i-DTEC_1.6_Front.jpg",booked:false},
+        {make:"Toyota",model:"RAV4",year:2020,transmission:"Automatic",seats:5,price:68,category:"SUV",image:"https://upload.wikimedia.org/wikipedia/commons/0/0d/2019_Toyota_RAV4_Icon_Tech_2.5_Front.jpg",booked:false},
+        {make:"Ford",model:"Explorer",year:2018,transmission:"Automatic",seats:7,price:75,category:"SUV",image:"https://upload.wikimedia.org/wikipedia/commons/5/5a/2018_Ford_Explorer_XLT_3.5_Front.jpg",booked:false},
+        {make:"Hyundai",model:"Accent",year:2020,transmission:"Automatic",seats:5,price:35,category:"Economy",image:"https://upload.wikimedia.org/wikipedia/commons/c/c3/2018_Hyundai_Accent_SE_in_Urban_Blue%2C_front_left.jpg",booked:false},
+        {make:"Kia",model:"Rio",year:2019,transmission:"Automatic",seats:5,price:33,category:"Economy",image:"https://upload.wikimedia.org/wikipedia/commons/1/1d/2018_Kia_Rio_1.4_ISG_2_5-door_Front.jpg",booked:false},
+        {make:"Chevrolet",model:"Spark",year:2018,transmission:"Automatic",seats:4,price:30,category:"Economy",image:"https://upload.wikimedia.org/wikipedia/commons/a/a6/2019_Chevrolet_Spark_LT_CVT_front_2.24.19.jpg",booked:false},
+        {make:"Ford",model:"Mustang",year:2018,transmission:"Manual",seats:4,price:120,category:"Luxury",image:"https://upload.wikimedia.org/wikipedia/commons/5/55/2018_Ford_Mustang_GT_5.0.jpg",booked:false},
+        {make:"BMW",model:"5 Series",year:2020,transmission:"Automatic",seats:5,price:150,category:"Luxury",image:"https://upload.wikimedia.org/wikipedia/commons/1/14/2019_BMW_520d_M_Sport_Automatic_2.0_Front.jpg",booked:false},
+        {make:"Mercedes-Benz",model:"E-Class",year:2021,transmission:"Automatic",seats:5,price:160,category:"Luxury",image:"https://upload.wikimedia.org/wikipedia/commons/6/66/2018_Mercedes-Benz_E220d_AMG_Line_Premium_Automatic_2.0_Front.jpg",booked:false}
+      ]
+      saveCars(base)
     }
+  })()
 
-    document.getElementById("welcomeUser").textContent = "Hi, " + currentUser.username;
+  const current = JSON.parse(localStorage.getItem('CURRENT_USER')||'null')
+  const welcome = document.getElementById('welcomeUser')
+  if(current) welcome.textContent = 'Hi, '+current.username
+  else welcome.textContent = 'Guest'
 
+  document.getElementById('logoutBtn').addEventListener('click',e=>{
+    e.preventDefault()
+    localStorage.removeItem('CURRENT_USER')
+    window.location.href='index.html'
+  })
 
-    document.getElementById("btnLogout").addEventListener("click", () => {
-      localStorage.removeItem("CURRENT_USER");
-      window.location.href = "signin.html";
-    });
-
-    function getCars() {
-  
-      let carsJSON = localStorage.getItem("CARS");
-      if (!carsJSON) {
-        localStorage.setItem("CARS", JSON.stringify([]));
-        carsJSON = '[]';
-      }
-      const cars = JSON.parse(carsJSON);
-      return cars;
+  document.getElementById('adminLink').addEventListener('click', e => {
+    e.preventDefault();
+    const pass = prompt("Enter Admin Password:");
+    if (pass === "CIS453") {
+      window.location.href = "admin.html";
+    } else if (pass !== null) {
+      alert("Incorrect password!");
     }
+  });
 
-    function renderCars() {
-      const container = document.getElementById("carContainer");
-      container.innerHTML = "";
+  const grid = document.getElementById('grid')
+  const catF = document.getElementById('categoryFilter'), transF = document.getElementById('transFilter'), priceF = document.getElementById('priceFilter')
+  const fromD = document.getElementById('fromDate'), toD = document.getElementById('toDate'), applyDateBtn = document.getElementById('applyDateBtn')
+  const payModal = document.getElementById('payModal'), payForm = document.getElementById('payForm'), payTitle = document.getElementById('payTitle'), payDetails = document.getElementById('payDetails')
+  let toBook = null
+  const bookingsTbody = document.querySelector('#bookingsTable tbody')
 
-      const cars = getCars();
-      if (cars.length === 0){
-        base_cars.forEach((car)=>cars.push(car));
-      }
-      localStorage.setItem("CARS", JSON.stringify(cars));
-      cars.forEach((car, i) => {
-        const imgUrl = car.image && car.image !== "" 
-          ? car.image 
-          : "https://picsum.photos/400/200?random=" + (i+1); 
-        const card = `
-          <div class="card">
-            <img src="${imgUrl}" alt="${car.make} ${car.model}">
-            <div class="card-body">
-              <h3>${car.make} ${car.model}</h3>
-              <p><strong>Year:</strong> ${car.year}</p>
-              <p><strong>Transmission:</strong> ${car.transmission}</p>
-              <p><strong>Seats:</strong> ${car.seats}</p>
-              <p class="price">$${car.price}/day</p>
-              <button class="rent-btn" onclick="rentCar(${i})">Rent Now</button>
-            </div>
+  function isOverlapping(bookings, carIndex, start, end){
+    return bookings.some(b=>{
+      if(b.carIndex!==carIndex) return false
+      const s=new Date(b.from), e=new Date(b.to)
+      return !(end <= s || start >= e)
+    })
+  }
+
+  function renderGrid(){
+    grid.innerHTML=''
+    const cars = getCars()
+    const category = catF.value, trans = transF.value, price = priceF.value
+    cars.forEach((c,i)=>{
+      if(category && c.category!==category) return
+      if(trans && c.transmission!==trans) return
+      if(price==='1' && c.price>=50) return
+      if(price==='2' && (c.price<50||c.price>100)) return
+      if(price==='3' && c.price<=100) return
+      const tile = document.createElement('div'); tile.className='card'
+      tile.innerHTML = `<img class="thumb" src="${c.image||'https://picsum.photos/seed/'+i+'/600/400'}" alt="">
+        <div class="body">
+          <h3>${c.make} ${c.model}</h3>
+          <div class="meta">${c.year} • ${c.transmission} • ${c.seats} seats</div>
+          <div class="price">$${c.price}/day</div>
+          <div class="row">
+            <button class="btn" id="rent_${i}">${c.booked ? 'Booked' : 'Rent Now'}</button>
+            <div style="flex:1"></div>
+            ${c.booked?'<div class="muted booked-note">Unavailable</div>':''}
           </div>
-        `;
-        container.innerHTML += card;
-      });
-    }
+        </div>`
+      grid.appendChild(tile)
+      const btn = document.getElementById('rent_'+i)
+      btn.disabled = !!c.booked
+      btn.addEventListener('click',()=>openBooking(i))
+    })
+    renderBookings()
+  }
 
-    function rentCar(index) {
-      const cars = getCars();
-      const car = cars[index];
-      alert("You rented the " + car.make + " " + car.model + "!");
-    }
+  function openBooking(index){
+    const cars = getCars()
+    toBook = index
+    payTitle.textContent = `Pay to book ${cars[index].make} ${cars[index].model}`
+    payDetails.textContent = `Price: $${cars[index].price}/day. Choose dates above and press Check Availability first.`
+    payModal.style.display='flex'
+  }
 
-    renderCars();
-  </script>
+  document.getElementById('cancelPay').addEventListener('click',()=>{payModal.style.display='none';toBook=null})
+  payForm && payForm.addEventListener('submit',function(e){
+    e.preventDefault()
+    if(!toBook){alert('No car selected');return}
+    const from = document.getElementById('fromDate').value, to = document.getElementById('toDate').value
+    if(!from||!to){alert('Select from and to dates first');return}
+    const s=new Date(from), t=new Date(to)
+    if(s>=t){alert('End date must be after start');return}
+    const bookings = getBookings()
+    if(isOverlapping(bookings,toBook,s,t)){alert('Car already booked for this period');return}
+    const booking = {id:Date.now(),carIndex:toBook,from:from,to:to,user:(current?current.username:'Guest'),status:'Confirmed',created:new Date().toISOString()}
+    bookings.push(booking)
+    saveBookings(bookings)
+    const cars = getCars(); cars[toBook].booked = true; saveCars(cars)
+    payModal.style.display='none'
+    payForm.reset()
+    toBook = null
+    renderGrid()
+    alert('Payment successful — booking confirmed.')
+  })
+
+  applyDateBtn.addEventListener('click',()=>{
+    const from = fromD.value, to = toD.value
+    if(!from||!to){alert('Pick from and to dates'); return}
+    const s=new Date(from), t=new Date(to)
+    if(s>=t){alert('End date must be after start');return}
+    const bookings = getBookings()
+    const cars = getCars()
+    cars.forEach((c,i)=> c.booked = isOverlapping(bookings,i,s,t) ? true : c.booked)
+    saveCars(cars)
+    renderGrid()
+  })
+
+  function renderBookings(){
+    const bookings = getBookings()
+    const cars = getCars()
+    bookingsTbody.innerHTML=''
+    bookings.forEach((b,idx)=>{
+      const row = document.createElement('tr')
+      row.innerHTML = `<td>${cars[b.carIndex].make} ${cars[b.carIndex].model}</td><td>${b.from} → ${b.to}</td><td>${b.status}</td>
+        <td><button class="btn" id="cancel_${idx}">Cancel</button></td>`
+      bookingsTbody.appendChild(row)
+      document.getElementById('cancel_'+idx).addEventListener('click',()=>{
+        if(!confirm('Cancel this booking?')) return
+        const arr = getBookings(); const rem = arr.splice(idx,1); saveBookings(arr)
+        const carIdx = rem[0].carIndex
+        const remaining = arr.some(x=>x.carIndex===carIdx)
+        const cars = getCars()
+        if(!remaining) cars[carIdx].booked = false
+        saveCars(cars)
+        renderGrid()
+      })
+    })
+  }
+
+  renderGrid()
+</script>
 </body>
 </html>
