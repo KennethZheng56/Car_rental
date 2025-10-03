@@ -113,6 +113,7 @@
       {make:"Frog", model:"Nature", year:0, transmission:"Automatic", seats:0, price:1},
       {make:"Eddie", model:"Chen", year:2005, transmission:"Manual", seats:1, price:5000}
     ];
+    localStorage.setItem("CARS", JSON.stringify(base_cars));
     const currentUser = JSON.parse(localStorage.getItem("CURRENT_USER"));
     if (!currentUser) {
       alert("You must log in first!");
@@ -128,15 +129,6 @@
     });
 
     function getCars() {
-      let john = localStorage.getItem("CARS");
-      if (john.length === 0){
-        localStorage.setItem("CARS", "[]");
-      } else {
-        const container = document.getElementById("carContainer");
-        container.innerHTML = john.forEach((v)=>JSON.stringify(john));
-      }
-      
-      // localStorage.setItem("CARS", "[]");
       const hi = JSON.parse(localStorage.getItem("CARS"));
 
       // const hi = [];
