@@ -133,7 +133,7 @@
         localStorage.setItem("CARS", "[]");
       } else {
         const container = document.getElementById("carContainer");
-        container.innerHTML = JSON.stringify(john);
+        container.innerHTML = john.forEach((v)=>JSON.stringify(john));
       }
       
       // localStorage.setItem("CARS", "[]");
