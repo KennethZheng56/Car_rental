@@ -128,8 +128,9 @@
     });
 
     function getCars() {
-  
-      let carsJSON = localStorage.getItem("CARS");
+      const hi = JSON.parse(localStorage.getItem("CARS"));
+      // const hi = []
+      let carsJSON = JSON.stringify(hi);
       if (!carsJSON) {
         localStorage.setItem("CARS", JSON.stringify([]));
         carsJSON = '[]';
@@ -143,9 +144,9 @@
       container.innerHTML = "";
 
       const cars = getCars();
-      if (cars.length === 0){
+      // if (cars.length === 0){
         base_cars.forEach((car)=>cars.push(car));
-      }
+      // }
       localStorage.setItem("CARS", JSON.stringify(cars));
       cars.forEach((car, i) => {
         const imgUrl = car.image && car.image !== "" 
