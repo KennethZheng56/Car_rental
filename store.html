@@ -128,12 +128,16 @@
     });
 
     function getCars() {
-      return JSON.parse(localStorage.getItem("CARS")) || [];
+      const carsJSON = JSON.parse(localStorage.getItem("CARS"));
+        if (!carsJSON) {
+        return []; // return empty array if nothing is stored
+    }
+      return JSON.parse(carsJSON);
     }
 
     function renderCars() {
       const container = document.getElementById("carContainer");
-      container.innerHTML = "";
+      container.innerHTML = "hi";
 
       const cars = getCars();
       base_cars.forEach((car)=>{
