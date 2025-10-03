@@ -1,0 +1,189 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Admin Dashboard</title>
+  <style>
+    body {
+      font-family: 'Poppins', sans-serif;
+      margin: 0;
+      background: #f5f7fa;
+      display: flex;
+      height: 100vh;
+    }
+    .sidebar {
+      width: 220px;
+      background: #2c3e50;
+      color: white;
+      display: flex;
+      flex-direction: column;
+      padding: 1rem;
+    }
+    .sidebar h2 {
+      margin: 0 0 1rem;
+      text-align: center;
+    }
+    .sidebar a {
+      color: white;
+      padding: 0.7rem 1rem;
+      margin: 0.3rem 0;
+      text-decoration: none;
+      display: block;
+      border-radius: 6px;
+    }
+    .sidebar a:hover {
+      background: #34495e;
+    }
+    .main {
+      flex: 1;
+      padding: 2rem;
+      overflow-y: auto;
+    }
+    h1 {
+      margin-bottom: 1.5rem;
+      color: #2c3e50;
+    }
+    form {
+      background: white;
+      padding: 1.5rem;
+      border-radius: 12px;
+      box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+      max-width: 500px;
+      margin-bottom: 2rem;
+    }
+    input, select {
+      width: 100%;
+      padding: 0.6rem;
+      margin: 0.5rem 0 1rem;
+      border: 1px solid #ccc;
+      border-radius: 6px;
+    }
+    button {
+      background: #3498db;
+      color: white;
+      border: none;
+      padding: 0.8rem 1.2rem;
+      border-radius: 6px;
+      cursor: pointer;
+      font-weight: bold;
+    }
+    button:hover {
+      background: #2980b9;
+    }
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      background: white;
+      box-shadow: 0 4px 10px rgba(0,0,0,0.05);
+      border-radius: 12px;
+      overflow: hidden;
+    }
+    th, td {
+      padding: 1rem;
+      border-bottom: 1px solid #eee;
+      text-align: left;
+    }
+    th {
+      background: #ecf0f1;
+    }
+    tr:hover {
+      background: #f9f9f9;
+    }
+  </style>
+</head>
+<body>
+  <div class="sidebar">
+    <h2>Admin Panel</h2>
+    <a href="store.html">Store</a>
+    <a href="index.html">Logout</a>
+  </div>
+
+  <div class="main">
+    <h1>Manage Cars</h1>
+
+    <form id="carForm">
+      <h3>Add New Car</h3>
+      <input type="text" id="carMake" placeholder="Make (e.g., Toyota)">
+      <input type="text" id="carModel" placeholder="Model (e.g., Camry)">
+      <input type="number" id="carYear" placeholder="Year">
+      <select id="carTransmission">
+        <option value="">Transmission</option>
+        <option>Automatic</option>
+        <option>Manual</option>
+      </select>
+      <input type="number" id="carSeats" placeholder="Seats">
+      <input type="number" id="carPrice" placeholder="Price per day ($)">
+      <button type="button" onclick="addCar()">Add Car</button>
+    </form>
+
+    <h3>Car Catalogue</h3>
+    <table id="carTable">
+      <thead>
+        <tr>
+          <th>Make</th>
+          <th>Model</th>
+          <th>Year</th>
+          <th>Transmission</th>
+          <th>Seats</th>
+          <th>Price/day</th>
+          <th>Action</th>
+        </tr>
+      </thead>
+      <tbody>
+      </tbody>
+    </table>
+  </div>
+
+  <script>
+    function getCars() {
+      return JSON.parse(localStorage.getItem("CARS")) || [];
+    }
+
+    function saveCars(cars) {
+      localStorage.setItem("CARS", JSON.stringify(cars));
+    }
+
+    function renderCars() {
+      const tableBody = document.querySelector("#carTable tbody");
+      tableBody.innerHTML = "";
+      getCars().forEach((car, i) => {
+        const row = `<tr>
+          <td>${car.make}</td>
+          <td>${car.model}</td>
+          <td>${car.year}</td>
+          <td>${car.transmission}</td>
+          <td>${car.seats}</td>
+          <td>$${car.price}</td>
+          <td><button onclick="deleteCar(${i})">Delete</button></td>
+        </tr>`;
+        tableBody.innerHTML += row;
+      });
+    }
+
+    function addCar() {
+      const car = {
+        make: document.getElementById("carMake").value,
+        model: document.getElementById("carModel").value,
+        year: document.getElementById("carYear").value,
+        transmission: document.getElementById("carTransmission").value,
+        seats: document.getElementById("carSeats").value,
+        price: document.getElementById("carPrice").value,
+      };
+      let cars = getCars();
+      cars.push(car);
+      saveCars(cars);
+      renderCars();
+      document.getElementById("carForm").reset();
+    }
+
+    function deleteCar(index) {
+      let cars = getCars();
+      cars.splice(index, 1);
+      saveCars(cars);
+      renderCars();
+    }
+
+    renderCars();
+  </script>
+</body>
+</html>

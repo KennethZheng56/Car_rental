@@ -1,0 +1,247 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Car Rental Pro</title>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600&display=swap" rel="stylesheet">
+  <style>
+    body {
+      margin: 0;
+      height: 100vh;
+      font-family: 'Poppins', sans-serif;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      background: linear-gradient(120deg, #c9d6ff, #e2e2e2);
+    }
+
+    .login-wrap {
+      width: 380px;
+      min-height: 440px;
+      background: #2e3b4e;
+      border-radius: 16px;
+      box-shadow: 0 12px 30px rgba(0,0,0,0.3);
+      overflow: hidden;
+      padding: 40px 30px;
+    }
+
+    .login-html {
+      width: 100%;
+      text-align: center;
+    }
+
+    .tab {
+      font-size: 18px;
+      margin: 0 15px;
+      padding-bottom: 10px;
+      display: inline-block;
+      border-bottom: 2px solid transparent;
+      cursor: pointer;
+      color: #bbb;
+      transition: all .25s ease;
+      font-weight: 500;
+    }
+
+    .tab:hover {
+      color: #ddd;
+    }
+
+    input[type="radio"] {
+      display: none;
+    }
+
+    #tab-1:checked + label,
+    #tab-2:checked + label {
+      color: #fff;
+      border-color: #1161ee;
+    }
+
+    .login-form {
+      margin-top: 40px;
+      min-height: 280px;
+      position: relative;
+    }
+
+    .sign-in-htm,
+    .sign-up-htm {
+      top: 0;
+      left: 0;
+      right: 0;
+      position: absolute;
+      backface-visibility: hidden;
+      transition: all 0.45s ease;
+      transform: rotateY(180deg);
+      opacity: 0;
+      padding-top: 10px;
+    }
+
+    #tab-1:checked ~ .login-form .sign-in-htm {
+      transform: rotateY(0);
+      opacity: 1;
+      position: relative;
+    }
+
+    #tab-2:checked ~ .login-form .sign-up-htm {
+      transform: rotateY(0);
+      opacity: 1;
+      position: relative;
+    }
+
+    .group {
+      margin-bottom: 28px;
+      text-align: center;
+    }
+
+    .group label {
+      font-size: 14px;
+      color: #ddd;
+      margin-bottom: 8px;
+      display: block;
+      text-align: left;
+      font-weight: 500;
+    }
+
+    .group input,
+    .group .button {
+      width: 100%;
+      padding: 14px 18px;
+      border-radius: 999px;
+      border: none;
+      font-size: 15px;
+      outline: none;
+      box-sizing: border-box;
+    }
+
+    .group input {
+      background: rgba(255, 255, 255, 0.1);
+      color: #fff;
+      transition: background 0.3s ease;
+    }
+
+    .group input:focus {
+      background: rgba(255, 255, 255, 0.18);
+    }
+
+    .group input::placeholder {
+      color: #cfcfcf;
+    }
+
+    .group .button {
+      background: #1161ee;
+      color: #fff;
+      font-weight: 600;
+      cursor: pointer;
+      transition: background 0.25s ease;
+    }
+
+    .group .button:hover {
+      background: #0d4bcf;
+    }
+
+    .msg {
+      font-size: 13px;
+      margin-top: 6px;
+      min-height: 18px;
+      text-align: left;
+    }
+    .msg.error { color: #ffb3b3; }
+    .msg.success { color: #b6ffd6; }
+  </style>
+</head>
+<body>
+  <div class="login-wrap">
+    <div class="login-html">
+      <input id="tab-1" type="radio" name="tab" class="sign-in" checked>
+      <label for="tab-1" class="tab">Sign In</label>
+
+      <input id="tab-2" type="radio" name="tab" class="sign-up">
+      <label for="tab-2" class="tab">Sign Up</label>
+
+      <div class="login-form">
+        <div class="sign-in-htm">
+          <div class="group">
+            <label>Username</label>
+            <input id="login-username" type="text" placeholder="Enter username">
+          </div>
+          <div class="group">
+            <label>Password</label>
+            <input id="login-password" type="password" placeholder="Enter password">
+          </div>
+          <div class="group">
+            <button class="button" id="btnLogin">Sign In</button>
+          </div>
+        </div>
+
+        <div class="sign-up-htm">
+          <div class="group">
+            <label>New Username</label>
+            <input id="signup-username" type="text" placeholder="Choose a username">
+          </div>
+          <div class="group">
+            <label>New Password</label>
+            <input id="signup-password" type="password" placeholder="Create a password">
+          </div>
+          <div class="group">
+            <label>Confirm Password</label>
+            <input id="signup-confirm" type="password" placeholder="Confirm password">
+          </div>
+          <div class="group">
+            <button class="button" id="btnSignup">Sign Up</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    function signup(username, password) {
+      let users = JSON.parse(localStorage.getItem("USERS")) || [];
+      if (users.some(u => u.username === username)) {
+        alert("User already exists!");
+        return;
+      }
+      users.push({ username, password });
+      localStorage.setItem("USERS", JSON.stringify(users));
+      alert("Account created successfully! Please sign in.");
+    }
+
+    function login(username, password) {
+      let users = JSON.parse(localStorage.getItem("USERS")) || [];
+      const found = users.find(u => u.username === username && u.password === password);
+      if (found) {
+        localStorage.setItem("CURRENT_USER", JSON.stringify(found));
+        window.location.href = "store.html";
+      } else {
+        alert("Invalid username or password.");
+      }
+    }
+
+    document.getElementById("btnLogin").addEventListener("click", (e) => {
+      e.preventDefault();
+      const username = document.getElementById("login-username").value.trim();
+      const password = document.getElementById("login-password").value.trim();
+      if (!username || !password) {
+        alert("Please enter both username and password.");
+        return;
+      }
+      login(username, password);
+    });
+
+    document.getElementById("btnSignup").addEventListener("click", (e) => {
+      e.preventDefault();
+      const username = document.getElementById("signup-username").value.trim();
+      const password = document.getElementById("signup-password").value.trim();
+      const confirm = document.getElementById("signup-confirm").value.trim();
+      if (!username || !password || !confirm) {
+        alert("Please fill all fields.");
+        return;
+      }
+      if (password !== confirm) {
+        alert("Passwords do not match!");
+        return;
+      }
+      signup(username, password);
+    });
+  </script>
+</body>
+</html>
