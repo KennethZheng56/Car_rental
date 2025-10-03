@@ -137,12 +137,15 @@
 
       const cars = getCars();
       // if (cars.length === 0) {
-      base_cars.forEach((car)=>{
-        cars.push(car)
-      });
-      localStorage.setItem("CARS", cars);
+      //   container.innerHTML = "<p>no</p>";
+      //   return;
       // }
-
+      base_cars.forEach((car)=>{
+        cars.push(car);
+      });
+      localStorage.setItem("CARS", JSON.stringify(cars));
+      // }
+      
       cars.forEach((car, i) => {
         const imgUrl = "https://picsum.photos/400/200?random=" + (i+1); //Placeholder (Remind Homer To replace/ or someone else can thanks)
         const card = `
